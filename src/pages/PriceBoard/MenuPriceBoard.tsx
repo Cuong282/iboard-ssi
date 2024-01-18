@@ -45,8 +45,8 @@ const Menu = () => {
 
 
   return (
-
-    <><div className="w-full  bg-theme-secondary px-3 bg-theme-price-table-col-highlight">
+  <>
+  <div className="w-full  bg-theme-secondary px-3 bg-theme-price-table-col-highlight">
       <div className="flex items-center justify-between  text-theme-text-tertiary   ">
         <div>
           <ul className="flex items-center text-theme-text-tertiary ">

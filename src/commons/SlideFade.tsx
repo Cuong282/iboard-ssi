@@ -5,7 +5,7 @@ const SlideFade = () => {
   useEffect(() => {
     const time = ref.current.offsetWidth / 48;
     ref.current.style.animation = `fadeLeft ${time}s linear 1s infinite`;
-  }, []);
+  }, [useRef]);
 
   return (
     <div className="overflow-x-hidden w-full h-auto">
