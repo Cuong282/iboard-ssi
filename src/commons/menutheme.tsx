@@ -10,12 +10,12 @@ const bgTheme = "bg-theme-dropdown-background" + cssMenuTheme;
 
 const itemThemes = [
   {
-    name: "Giao diện sáng",
-    icons: <LuSunMoon className="ml-5 text-theme-text-tertiary" />,
-  },
-  {
     name: "Giao diện tối",
     icons: <BsFillMoonFill className="ml-5 text-theme-text-tertiary" />,
+  },
+  {
+    name: "Giao diện sáng",
+    icons: <LuSunMoon className="ml-5 text-theme-text-tertiary" />,
   },
   {
     name: "Giao diện Oled",
@@ -53,5 +53,4 @@ export const renderMenuTheme = (state: ITheme, setState: any) => {
 export const renderIconTheam = (state: ITheme) => {
   return itemThemes[state - 1].icons;
 };
-
 
