@@ -7,11 +7,9 @@ import {
   MinusOutlined,
 } from "@ant-design/icons";
 import HightCharts from "./hightCharts";
-import "./BoxIndex.css";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 import BoxIndex from "./BoxIndex";
-// import BoxIndex from "./BoxIndex";
 interface History {
   indexId: string;
   indexValue: number;
@@ -52,32 +50,29 @@ interface IIndexChart {
 }
 
 const BoxChart = () => {
-  const [data, setData] = useState<IIndexChart[] | []>([]);
+  // const [data, setData] = useState<IIndexChart[] | []>([]);
 
-  async function getdata() {
-    // const data: any = await getIndexmuntichart();
-    // setData(data.data.data);
-  }
+  // async function getdata() {
+  //   const data: any = await getIndexmuntichart();
+  //   setData(data.data.data);
+  // }
 
-  useEffect(() => {
-    getdata();
-  }, []);
+  // useEffect(() => {
+  //   getdata();
+  // }, []);
 
   return (
     <div className=" items-center w-full h-50 p-1 bg-theme-primary grid grid-cols-12 gap-1">
       <div className="text-xs col-span-7 xl:col-span-8 flex space-x-1 h-full overflow-x-auto rounded scrollbar-thin scrollbar-thumb-rounded-full scrollbar-thumb-scroll">
-        {data.map((e, i) => {
-          if (i < 4) {
-            return (
-              <>
-                <div className=" flex-1 p-2 bg-theme-secondary rounded" key={i}>
-                  <div className="index-value h-full" key={i}>
+      <>
+                <div className=" flex-1 p-2 bg-theme-secondary rounded">
+                  <div className="index-value h-full" >
                     {
-                      <HightCharts index={i} />
+                      <HightCharts />
                       }
                     <div className="flex justify-between py-1">
                       <p className="flex items-center">
-                        {e.label}
+                        
                         <BiChevronDown />
                       </p>
                       <p
@@ -85,15 +80,14 @@ const BoxChart = () => {
                         style={{ color: "#0bdf39" }}
                       >
                         <ArrowUpOutlined className="text-xs" />
-                        {e.indexValue}({e.change} {e.changePercent}%)
+                        
                       </p>
                     </div>
                     <div className="flex justify-between whitespace-nowrap py-px">
-                      <p>{new Intl.NumberFormat().format(e.allQty)} CP</p>
+                      <p>CP</p>
                       <p>
-                        {new Intl.NumberFormat("de-DE").format(
-                          e.allValue / 1000000000
-                        )}{" "}
+                        
+                      
                         Tỷ{" "}
                       </p>
                     </div>
@@ -109,14 +103,13 @@ const BoxChart = () => {
                           className="text-color-up"
                           style={{ color: "#0bdf39" }}
                         >
-                          {" "}
-                          {e.advances}
+                          
                         </p>
                         <p
                           className="ellipsis-wrap whitespace-nowrap "
                           style={{ color: "#f23aff" }}
                         >
-                          ({e.ceiling})
+                         
                         </p>
                       </div>
                       <div className="flex-1 text-color-ref flex items-center justify-center space-x-0.5">
@@ -130,7 +123,7 @@ const BoxChart = () => {
                           className="ellipsis-wrap whitespace-nowrap mr-2px"
                           style={{ color: "#fdff12" }}
                         >
-                          {e.nochanges}
+                        
                         </p>
                       </div>
                       <div className="flex-1 flex items-center justify-center space-x-0.5">
@@ -144,13 +137,13 @@ const BoxChart = () => {
                           className="ellipsis-wrap whitespace-nowrap"
                           style={{ color: "#ff0017" }}
                         >
-                          {e.declines}
+                          
                         </p>
                         <p
                           className="ellipsis-wrap whitespace-nowrap"
                           style={{ color: "#00c9ff" }}
                         >
-                          ({e.floor})
+                          
                         </p>
                       </div>
                       <p className=" ellipsis-wrap whitespace-nowrap pt-1 pr-px">
@@ -160,9 +153,6 @@ const BoxChart = () => {
                   </div>
                 </div>
               </>
-            );
-          }
-        })}
       </div>
       <BoxIndex />
     </div>
