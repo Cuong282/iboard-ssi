@@ -23,6 +23,7 @@ const TableMain = () => {
     return width / Percent;
   };
 
+  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
   const getDefaultCol = (widthChange: number | undefined): ColDef[] => {
     const width = document.getElementById("root")?.offsetWidth || 0;
     if (!widthChange) widthChange = width;
@@ -254,7 +255,9 @@ const TableMain = () => {
   }, []);
 
   return (
-    <div className="  flex-1 cf-table-main dark:bg-red-800 dark:border-gray-700 text-theme-text-tertiary bg-theme-secondary ">
+    <div className="  flex-1 cf-table-main  dark:border-gray-700 text-theme-text-tertiary bg-theme-secondary "
+    
+    style={containerStyle}>
       <div className="h-full  ">
         <div className="ag-root-wrapper ag-layout-normal ag-ltr">
           <AgGridReact<IOlympicData>

@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 // } from "../../services/apis";
 import Highcharts from "highcharts/highstock";
 import HighchartsReact from "highcharts-react-official";
-// import { configChartIndex } from "../../untils/bindDataHighcharts";
+import { configChartIndex } from "../../untils/bindDataHighcharts";
 import "./BoxIndex.css";
 
 const HightCharts = ({ index }: any) => {
@@ -60,7 +60,7 @@ const HightCharts = ({ index }: any) => {
           {dataChart.value && dataChart.volume && dataChart.prevIndexValue && (
             <HighchartsReact
               highcharts={Highcharts}
-              // options={configChartIndex(dataChart.value, dataChart.volume, dataChart.prevIndexValue)}
+              options={configChartIndex(dataChart.value, dataChart.volume, dataChart.prevIndexValue)}
             />
           )}
         </div>
