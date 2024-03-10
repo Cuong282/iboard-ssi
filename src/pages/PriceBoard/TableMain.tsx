@@ -8,232 +8,62 @@ import React, {
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
-
 import {
-  CellClickedEvent,
   ColDef,
+  ColGroupDef,
+  Grid,
+  GridOptions,
+  GridReadyEvent,
 } from "ag-grid-community";
-import { IOlympicData } from "../../interfaces/interfaces";
-// import { getNewDataTT } from "../../services/apis";
-// import CustomCellRenderer from "./customCellRenderer";
 
+import { IOlympicData } from "../../interfaces/interfaces";
 
 const TableMain = () => {
-  // const getWidthFromPercent = (Percent: number, width: number): number => {
-  //   return width / Percent;
-  // };
-  const gridRef = useRef<AgGridReact<IOlympicData>>(null);
-  const rowPin: any = useRef([]);
-  //const [saves,serSaves]= useState();
-  function findWithAttr(array: any[], attr: string, value: string) {
-    for (var i = 0; i < array.length; i += 1) {
-      if (array[i][attr] === value) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-  const ragCellClassRules = {
-    'rag-green-outer': (params:any) => params.value > 40,
-    'rag-yellow-outer': (params:any) => params.value >= 30 && params.value < 40,
-    'rag-red-outer': (params:any) => params.value < 30,
-  };
-  const ragRenderer = (params:any) => {
-    return <span className="rag-element">{params.value}</span>;
+  const getWidthFromPercent = (Percent: number, width: number): number => {
+    return width / Percent;
   };
 
-  const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
-  const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
-  const getDefaultCol = (widthChange: number | undefined): ColDef<any>[] => {
+  const getDefaultCol = (widthChange: number | undefined): ColDef[] => {
     const width = document.getElementById("root")?.offsetWidth || 0;
     if (!widthChange) widthChange = width;
+    const colDef: ColDef[] = [
+      {
+        headerName: "CK",
+        field: "athlete",
+        width: getWidthFromPercent(10, widthChange),
+        pinned: "left",
+        lockPinned: true,
 
-  
-    const columnDefs = [
-      {
-        field: "",
-        width: 5,
-     
-        // cellRenderer: CustomCellRenderer,
-        sortable: true,
-        cellClass: "custom-athlete-cell",
-        onCellDoubleClicked: (event: CellClickedEvent) => {
-          if (event.rowPinned) {
-            const index = findWithAttr(rowPin.current, "CK", event.data.CK);
-            if (index != +1) rowPin.current.splice(index, 1);
-            gridRef.current!.api.setPinnedTopRowData(rowPin.current);
-            gridRef.current!.api.applyTransaction({
-              add: [event.data],
-            });
-          } else {
-            const newData = { ...event.data };
-            rowPin.current.push(newData);
-            gridRef.current!.api.setPinnedTopRowData(rowPin.current);
-            console.log("newData:", newData);
-            gridRef.current!.api.applyTransaction({
-              remove: [event.data],
-            });
-          }
-        },
       },
       {
-        field: "CK",
-        width: 50,
+        headerName: "TC",
+        field: "age",
+        width: getWidthFromPercent(10, widthChange),
       },
       {
-        headerName: "khớp lệnh",
- 
-        minWidth: 150,
-        marryChildren: true,
-        children: [
-          {
-           
-            field: "Giá",
-            cellClassRules: ragCellClassRules,
-            cellRenderer: ragRenderer,
-            width: 70,
-            cellStyle: {
-              "background-color":
-                "var(--color-theme-price-table-col-highlight)",
-            },
-          },
-          {
-         
-            field: "KL",
-            width: 70,
-            cellStyle: {
-              "background-color":
-                "var(--color-theme-price-table-col-highlight)",
-            },
-          },
-          {
-           
-            field: "+/-",
-            width: 70,
-            cellStyle: {
-              "background-color":
-                "var(--color-theme-price-table-col-highlight)",
-            },
-          },
-          {
-          
-            field: "+/-(%)",
-            width: 70,
-            cellStyle: {
-              "background-color":
-                "var(--color-theme-price-table-col-highlight)",
-            },
-          },
-        ],
+        headerName: "Trần",
+        field: "age",
+        width: getWidthFromPercent(10, widthChange),
       },
       {
-    
-        field: "Trần",
-        width: 70,
-        cellStyle: {
-          color: "rgb(242, 58, 255)",
-        },
+        headerName: "Sàn",
+        field: "age",
+        width: getWidthFromPercent(10, widthChange),
       },
-      {
-     
-        field: "Sàn",
-        width: 70,
-        cellStyle: {
-          color: "rgb(0, 201, 255)",
-        },
-      },
-      {
-  
-        field: "TC",
-        width: 70,
-        cellStyle: {
-          color: "var(--color-theme-text-ref)",
-        },
-      },
-
-      {
-        headerName: "bên mua",
-        marryChildren: true,
-        children: [
-          {  field: "Giá3", width: 70 },
-          {  field: "KL3", width: 70 },
-          { field: "Giá2", width: 70 },
-          { field: "KL2", width: 70 },
-          {  field: "Giá1", width: 70 },
-          {  field: "KL1", width: 70 },
-        ],
-      },
-
-      {
-        headerName: "bên bán",
-        marryChildren: true,
-        children: [
-          { field: "giá1", width: 70 },
-          { field: "kL1", width: 70 },
-          { field: "giá2", width: 70 },
-          { field: "kL2", width: 70 },
-          { field: "giá3", width: 70 },
-          { field: "kL3", width: 70 },
-        ],
-      },
-          {
-            field: "TổngKL",
-            width: 90,
-            cellStyle: {
-           color: "var(--color-theme-text-tertiary)",
-              
-            },
-          },
-          {
-            field: "Cao",
-            width: 70,
-            cellStyle: {
-              color: "var(--color-theme-text-up)",
-            },
-          },
-          {
-            field: "Thấp",
-            width: 70,
-            cellStyle: {
-              color: "var(--color-classic-text-down)",
-            },
-          },
-      
-
-      {
-        headerName: "ĐTNN",
-        marryChildren: true,
-        children: [
-          {
-            field: "NNmua",
-            width: 80,
-            cellStyle: {
-              color: "var(--color-theme-text-tertiary)",
-            },
-          },
-          {
-            field: "NNbán",
-            width: 80,
-            cellStyle: {
-              color: "var(--color-theme-text-tertiary)",
-            },
-          },
-          {
-            field: "Room",
-            width: 110,
-            cellStyle: {
-              color: "var(--color-theme-text-tertiary)",
-            },
-          },
-        ],
-      },
+      { field: "country", width: getWidthFromPercent(10, widthChange) },
+      { field: "year", width: getWidthFromPercent(10, widthChange) },
+      { field: "date", width: getWidthFromPercent(10, widthChange) },
+      { field: "sport", width: getWidthFromPercent(10, widthChange) },
+      { field: "gold", width: getWidthFromPercent(10, widthChange) },
+      { field: "silver", width: getWidthFromPercent(10, widthChange) },
+      { field: "bronze", width: getWidthFromPercent(10, widthChange) },
+      { field: "total", width: getWidthFromPercent(10, widthChange) },
     ];
-    return columnDefs;
+    return colDef;
   };
 
-  const [rowData, setRowData] = useState<any[]>();
-  const [columnDefs, setColumnDefs] = useState<ColDef<any>[]>(
+  const [rowData, setRowData] = useState<IOlympicData[]>();
+  const [columnDefs, setColumnDefs] = useState<ColDef[]>(
     getDefaultCol(undefined)
   );
 
@@ -244,92 +74,196 @@ const TableMain = () => {
     });
   }, []);
 
-  const defaultColDef = useMemo<ColDef<any>>(() => {
+  const defaultColDef = useMemo<ColDef>(() => {
     return {
-      sortable: true,
-      columnDefs: columnDefs,
+      resizable: true,
     };
   }, []);
 
-  async function getNewdata() {
-    try {
-      // const newdata: any = await getNewDataTT();
-      // const data = convertData(newdata.data.data);
-      // setRowData(data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  function convertData(data: any) {
-    return (
-      data.length > 0 &&
-      data.map((item: any) => {
-        return {
-          "": item.stockSymbol,
-          CK: item.stockSymbol,
-          Giá: new Intl.NumberFormat("en-US").format(item.matchedPrice / 1000),
-          KL: item.matchedVolume / 100,
-          "+/-": item.priceChange / 1000,
-          "+/-(%)": item.priceChangePercent,
-          Trần: item.ceiling / 1000,
-          TC: item.refPrice / 1000,
-          Sàn: item.floor / 1000,
-          //bên mua
-          Giá3: item.best3Bid / 1000,
-          KL3: item.best3BidVol / 1000,
-          Giá2: item.best2Bid / 1000,
-          KL2: Intl.NumberFormat("it-IT").format(item.best2BidVol / 10),
-          Giá1: item.best1Bid / 1000,
-          KL1: new Intl.NumberFormat().format(item.best1BidVol),
-          //bên bán
-          giá1: item.best1Offer / 1000,
-          kL1: new Intl.NumberFormat().format(item.best1OfferVol),
-          giá2: item.best2Offer / 1000,
-          kL2: new Intl.NumberFormat().format(item.best2OfferVol),
-          giá3: item.best3Offer / 1000,
-          kL3: new Intl.NumberFormat().format(item.best3OfferVol / 1),
-
-          TổngKL: new Intl.NumberFormat().format(item.nmTotalTradedQty),
-          Cao: item.highest / 1000,
-          Thấp: item.lowest / 1000,
-          NNmua: new Intl.NumberFormat().format(item.buyForeignQtty),
-          NNbán: new Intl.NumberFormat().format(item.sellForeignQtty),
-          Room: new Intl.NumberFormat().format(item.remainForeignQtty),
-        };
-      })
-    );
-  }
-
-  const gridOptions = {
-    columnDefs: columnDefs,
-  };
-  const onGridReady = useCallback((params: any) => {
-    getNewdata();
+  const onGridReady = useCallback((params: GridReadyEvent) => {
+    setRowData([
+      {
+        athlete: "Michael Phelps",
+        age: 23,
+        country: "United States",
+        year: 2008,
+        date: "24/08/2008",
+        sport: "Swimming",
+        gold: 8,
+        silver: 0,
+        bronze: 0,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 29,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+      {
+        athlete: "Michael Phelps",
+        age: 19,
+        country: "United States",
+        year: 2004,
+        date: "29/08/2004",
+        sport: "Swimming",
+        gold: 6,
+        silver: 0,
+        bronze: 2,
+        total: 8,
+      },
+    ]);
   }, []);
 
   return (
-    <div
-      className="price-board-table_main flex-1 overflow-y-auto
-       ag-theme-alpine ag-header-row-no-group.ag-header-row-label-left .ag-header-cell-label"
-      style={containerStyle}
-    >
-      <div
-        style={gridStyle}
-        className={
-          "ag-theme-quartz"
-        }
-      >
-        <AgGridReact<IOlympicData>
-          rowData={rowData}
-          ref={gridRef}
-          columnDefs={columnDefs}
-          defaultColDef={defaultColDef}
-          rowDragManaged={true}
-          animateRows={true}
-          sideBar={true}
-          onGridReady={onGridReady}
-        ></AgGridReact>
+    <div className="  flex-1 cf-table-main dark:bg-red-800 dark:border-gray-700 text-theme-text-tertiary bg-theme-secondary ">
+      <div className="h-full  ">
+        <div className="ag-root-wrapper ag-layout-normal ag-ltr">
+          <AgGridReact<IOlympicData>
+            rowData={rowData}
+            columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+            onGridReady={onGridReady}
+          ></AgGridReact>
+        </div>
       </div>
     </div>
   );
